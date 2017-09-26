@@ -1,20 +1,23 @@
 
-# bench.py #
+## bench.py ##
 -----------------
-## _Requires:_ sysbench, python 3.x ##
+### _Requires:_ sysbench, python 3.x, pip 9.0.1+ (pip -V) ###
 outputs machine info and runs sysbench CPU and FileIO benchmark for
 determining baseline performance on system.
 
-## installing sysbench ##
+### upgrade pip ###
 
-### debian/ubuntu: ###
+pip3 install --upgrade pip
+
+### installing sysbench ###
+
+#### debian/ubuntu: ####
 sudo apt-get install sysbench
 
-### MacOSX ###
+#### MacOSX ####
 brew install sysbench
 
-### Windows10 ###
-_install Windows Feature - Linux Subsystem_
+#### Windows10 #### _install Windows Feature - Linux Subsystem_
 sudo apt-get install sysbench
 
 ### other articles about sysbench: ###
