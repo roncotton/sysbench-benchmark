@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# bench.py
+# Deep Learning Research - WSU Vancouver
+
+# machine_bench.py
 # -----------------
-# Requires: sysbench, python 3.x, pip 9.0.1 (check /w pip -V)
-# upgrade pip: pip3 install --upgrade pip
+# Requires: sysbench, python 3.x
 # outputs machine info and runs sysbench CPU and FileIO benchmark for
 # determining baseline performance on system.
 
@@ -23,9 +24,6 @@
 # http://imysql.com/wp-content/uploads/2014/10/sysbench-manual.pdf
 # https://anothermysqldba.blogspot.com/2013/05/benchmarking-mysql-cpu-file-io-memory.html
 # http://blog.siphos.be/2013/04/comparing-performance-with-sysbench-part-2/
-
-# TODO:
-# 	- unsure why /tmp folder is not deleted after benchmark
 
 import platform             # for computerInfo() method
 import socket               # for computerInfo() method
@@ -82,10 +80,8 @@ def computerInfo(save=False, filename=machine_specs):
 def pythonModules(arg='', filename=machine_modules_local):
     with open(filename, "a") as output:
         subprocess.call(["pip", "list", "--format=columns", arg], stdout=output)
-    
 
 # --- Benchmarks
-
 
 def sysbenchCPU(prime=20000, filename=machine_sysbench_cpu):
     '''execute sysbench cpu benchmark
@@ -193,6 +189,9 @@ def appendLine(filename='', text=''):
     with open(filename, "a") as f:
         f.write(text)
 
+def pauseTest(timeoutsec=1):
+    time.sleep(timeoutsec)
+
 # --- MAIN ---
 
 
@@ -216,33 +215,36 @@ def main():
     for i in range(num_tests):
         print("CPU Test:", (i + 1), "/", num_tests, "complete.")
         appendLine(machine_sysbench_cpu, "CPU Test " + str(i) + " Start: " + str(datetime.datetime.now()) + "\n")
-        sysbenchCPU()                            # standard test
+        sysbenchCPU()		# standard test
         appendLine(machine_sysbench_cpu, "CPU Test " + str(i) + " End: " + str(datetime.datetime.now()) + "\n")
+        pauseTest()
 
     # Memory Test
     for i in range(num_tests):
         print("Memory Test:", (i + 1), "/", num_tests, "complete.")
         appendLine(machine_sysbench_memory, "Memory Test " + str(i) + " Start: " + str(datetime.datetime.now()) + "\n")
-        sysbenchMemory()                            # standard test
+        sysbenchMemory()	# standard test
         appendLine(machine_sysbench_memory, "Memory Test " + str(i) + " End: " + str(datetime.datetime.now()) + "\n")
+        pauseTest()
 
     # Thread Test
     for i in range(num_tests):
         print("Thread Test:", (i + 1), "/", num_tests, "complete.")
         appendLine(machine_sysbench_threads, "Thread Test " + str(i) + " Start: " + str(datetime.datetime.now()) + "\n")
-        sysbenchThreads()
+        sysbenchThreads()	# standard test
         appendLine(machine_sysbench_threads, "Thread Test " + str(i) + " End: " + str(datetime.datetime.now()) + "\n")
-                                   # standard test
+        pauseTest()
 
     # File Test
-    # Note: using MySQL Test, as this adds an extra requirement to installation
+    # Note: if a more extensive test of IO is required, MySQL tests can be run using --test=oltp
     for i in range(num_tests):
         print("File Test:", (i + 1), "/", num_tests, "complete.")
-        if i!=1: 
+        if i!=1:
             appendLine(machine_sysbench_file, "File Test " + str(i) + " Start: " + str(datetime.datetime.now()) + "\n")
         sysbenchFile(i,'16GB')                            # lowered size
         if i!=1:
             appendLine(machine_sysbench_file, "File Test " + str(i) + " End: " + str(datetime.datetime.now()) + "\n")
+        pauseTest()
 
     # print results of tests
     fileSysout(machine_specs)                   # output results
