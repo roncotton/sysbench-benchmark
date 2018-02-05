@@ -25,5 +25,3 @@ http://imysql.com/wp-content/uploads/2014/10/sysbench-manual.pdf
 https://anothermysqldba.blogspot.com/2013/05/benchmarking-mysql-cpu-file-io-memory.html
 http://blog.siphos.be/2013/04/comparing-performance-with-sysbench-part-2/
 
-### TODO: ###
-- unsure why /tmp folder is not deleted after benchmark
